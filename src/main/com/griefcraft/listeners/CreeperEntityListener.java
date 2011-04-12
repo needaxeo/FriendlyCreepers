@@ -1,6 +1,8 @@
 package com.griefcraft.listeners;
 
+import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityListener;
 
@@ -12,45 +14,31 @@ public class CreeperEntityListener extends EntityListener {
 	 * The parent object
 	 */
 	private FriendlyCreepers parent;
-	
-	/**
-	 * The creeper's class
-	 */
-	public static final String CREEPER_CLASS = "CraftCreeper";
-	
+
 	public CreeperEntityListener(FriendlyCreepers parent) {
 		this.parent = parent;
 	}
-	
+
 	@Override
 	public void onEntityExplode(EntityExplodeEvent event) {
-		if(event.isCancelled()) {
+
+		if (event.isCancelled()) {
 			return;
 		}
-		
+
 		Entity entity = event.getEntity();
 		boolean shouldExplode = true;
-		
-		if(entity == null) {
-			/*
-			 * It's TNT!
-			 */
 
+		// tnt
+		if (entity instanceof TNTPrimed) {
 			shouldExplode = Boolean.parseBoolean(parent.getProperties().getProperty("enable-tnt", "false"));
-		} else if(entity.getClass().getSimpleName().equals(CREEPER_CLASS)) {
-			/*
-			 * Fowl creeper!
-			 */
-			
+		} else if (entity instanceof Creeper) {
+			// creeper
 			shouldExplode = Boolean.parseBoolean(parent.getProperties().getProperty("enable-creepers", "false"));
 		}
-		
-		/*
-		 * Cancel it if the config option for the explosion allows us to!
-		 */
-		if(!shouldExplode) {
+
+		if (!shouldExplode) {
 			event.setCancelled(true);
 		}
 	}
-	
 }
