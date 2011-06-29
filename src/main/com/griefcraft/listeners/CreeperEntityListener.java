@@ -29,11 +29,9 @@ public class CreeperEntityListener extends EntityListener {
 		Entity entity = event.getEntity();
 		boolean shouldExplode = true;
 
-		// tnt
 		if (entity instanceof TNTPrimed) {
 			shouldExplode = Boolean.parseBoolean(parent.getProperties().getProperty("enable-tnt", "false"));
 		} else if (entity instanceof Creeper) {
-			// creeper
 			shouldExplode = Boolean.parseBoolean(parent.getProperties().getProperty("enable-creepers", "false"));
 		}
 
